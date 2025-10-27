@@ -12,4 +12,16 @@
     <string name="release_date">Fecha de salida</string>
     <string name="director_es">Director(es)</string>
     <string name="producer_es">Productor(es)</string>
+    <string name="species">Especies</string>
+    <string name="starships">Naves</string>
+    <string name="crear_pelicula">Crear Pelicula</string>
+    <string name="vehicles">Vehiculos</string>
+    <string name="characters">Personajes</string>
+    <string name="planets">Planetas</string>
+    <string name="url">URL</string>
+    <string name="created">Creado</string>
+    <string name="edited">Editado</string>
+    <string name="edicion_pelicula">Editar una pelicula</string>
+    <string name="subtexto_edicion_pelicula">Selecciona la pelicula y editala</string>
+    <string name="editar_pelicula">Editar Pelicula</string>
 </resources>

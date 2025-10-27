@@ -1,18 +1,21 @@
 package com.example.start_wars.ui.clases
 
 data class Films(
-    val title: String = "",
-    val episode_id: Int = 0,
-    val opening_crawl: String = "",
-    val director: String = "",
-    val producer: String = "",
-    val release_date: String = "",
-    val species: List<String> = emptyList(),
-    val starships: List<String> = emptyList(),
-    val vehicles: List<String> = emptyList(),
-    val characters: List<String> = emptyList(),
-    val planets: List<String> = emptyList(),
-    val url: String = "",
-    val created: String = "",
-    val edited: String = ""
+    var title: String = "",
+    var episode_id: Int = 0,
+    var opening_crawl: String = "",
+    var director: String = "",
+    var producer: String = "",
+    var release_date: String = "",
+    var era: String = "",
+    var rating: String = "",
+    var is_original_trilogy: Boolean = false,
+    var species: List<String> = emptyList(),
+    var starships: List<String> = emptyList(),
+    var vehicles: List<String> = emptyList(),
+    var characters: List<String> = emptyList(),
+    var planets: List<String> = emptyList(),
+    var url: String = "",
+    var created: String = "",
+    var edited: String = ""
 )

@@ -14,7 +14,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -37,15 +40,18 @@ import com.example.start_wars.ui.clases.Films
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
-fun CreacionPelicula(modifier: Modifier = Modifier) {
-
+fun EdicionPelicula(modifier: Modifier = Modifier) {
 
     var film by remember { mutableStateOf(Films()) }
     var isCreating by remember { mutableStateOf(true) }
 
+    val opciones = listOf("Opción 1", "Opción 2", "Opción 3")
+
+    var expanded by remember { mutableStateOf(false) }
+    var seleccion by remember { mutableStateOf(opciones.first()) }
+
     Column(modifier = Modifier.fillMaxSize()) {
-        HeaderBoxCreacion()
+        HeaderBoxEdicion()
 
         val scrollState = rememberScrollState()
         Column(
@@ -59,17 +65,51 @@ fun CreacionPelicula(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
-                text = stringResource(R.string.creacion_pelicula),
+                text = stringResource(R.string.edicion_pelicula),
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Bold
                 )
             )
 
             Text(
-                text = stringResource(R.string.subtexto_creacion_pelicula),
+                text = stringResource(R.string.subtexto_edicion_pelicula),
                 style = MaterialTheme.typography.titleMedium
             )
 
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded } // alternar abrir/cerrar
+            ) {
+                OutlinedTextField(
+                    value = seleccion,
+                    onValueChange = {},
+                    readOnly = true, // el usuario no escribe, solo elige
+                    label = { Text("Selecciona una opción") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded)
+                    },
+                    modifier = Modifier
+                        .menuAnchor() // ancla el menú al TextField
+                        .fillMaxWidth()
+                )
+
+                // 🔹 Menú de opciones
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    opciones.forEach { opcion ->
+                        DropdownMenuItem(
+                            text = { Text(opcion) },
+                            onClick = {
+                                seleccion = opcion   // actualiza la selección
+                                expanded = false     // cierra el menú
+                            }
+                        )
+                    }
+                }
+
+            }
             Text(
                 text = stringResource(R.string.tittle),
                 style = MaterialTheme.typography.bodySmall
@@ -246,19 +286,17 @@ fun CreacionPelicula(modifier: Modifier = Modifier) {
                 ),
                 modifier = Modifier.fillMaxWidth().padding(24.dp)
             ) {
-                Text(stringResource(R.string.crear_pelicula))
+                Text(stringResource(R.string.editar_pelicula))
             }
 
             Spacer(modifier = Modifier.height(60.dp))
-
-
         }
     }
 }
 
 
 @Composable
-fun HeaderBoxCreacion() {
+fun HeaderBoxEdicion() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -281,8 +319,9 @@ fun HeaderBoxCreacion() {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewCreacionPelicula() {
-    CreacionPelicula()
+fun PreviewEdicionPelicula() {
+    // Si tienes theme propio, úsalo aquí como haces en SignUp()
+    EdicionPelicula()
 }
 
 
