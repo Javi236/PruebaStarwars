@@ -93,7 +93,7 @@ fun EdicionPelicula(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                 )
 
-                // 🔹 Menú de opciones
+                //Menú de opciones
                 ExposedDropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
