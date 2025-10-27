@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">start_wars</string>
+    <string name="creacion_pelicula">Dar de alta una pelicula</string>
+    <string name="subtexto_creacion_pelicula">Aporta los datos necesarios de la pelicula</string>
+    <string name="star_war_desc">Imagen de star wars</string>
+    <string name="star_war">STAR WARS</string>
+    <string name="tittle">Titulo</string>
+    <string name="episode_id">Id del episodio</string>
+    <string name="opening_crawl">Frase de apertura</string>
+    <string name="director">Director</string>
+    <string name="producer">Productor</string>
+    <string name="release_date">Fecha de salida</string>
+    <string name="director_es">Director(es)</string>
+    <string name="producer_es">Productor(es)</string>
+</resources>
