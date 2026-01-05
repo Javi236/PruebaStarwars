@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.start_wars.R
 import com.example.start_wars.composables.CardStyle
@@ -221,4 +222,63 @@ fun FilmsListContent(
         )
     }
 }
+
+//Preview para mostrar como seria el listar(la parte de las tarjetas)
+@Preview(showBackground = true)
+@Composable
+fun FilmsListContentPreview() {
+    val sample = listOf(
+        Films(
+            title = "A New Hope",
+            episode_id = 4,
+            opening_crawl = "",
+            director = "George Lucas",
+            producer = "Gary Kurtz",
+            release_date = "1977-05-25",
+            era = "Imperial Era",
+            rating = "8.6",
+            is_original_trilogy = true,
+            species = emptyList(),
+            starships = emptyList(),
+            vehicles = emptyList(),
+            characters = emptyList(),
+            planets = emptyList(),
+            url = "",
+            created = "",
+            edited = ""
+        ),
+        Films(
+            title = "The Phantom Menace",
+            episode_id = 1,
+            opening_crawl = "",
+            director = "George Lucas",
+            producer = "Rick McCallum",
+            release_date = "1999-05-19",
+            era = "Republic Era",
+            rating = "6.5",
+            is_original_trilogy = false,
+            species = emptyList(),
+            starships = emptyList(),
+            vehicles = emptyList(),
+            characters = emptyList(),
+            planets = emptyList(),
+            url = "",
+            created = "",
+            edited = ""
+        )
+    )
+
+    CompositionLocalProvider(LocalCardStyle provides CardStyle) {
+        FilmsListContent(
+            modifier = Modifier,
+            filmsList = sample,
+            eventos = FilmsListEvents(
+                onDelete = {},
+                onEditFilm = {},
+                onAddFilm = {}
+            )
+        )
+    }
+}
+
 

@@ -11,8 +11,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.start_wars.data.Films
 import com.example.start_wars.composables.DetailContent
+import com.example.start_wars.data.model.FilmsRepository
 
 //Misma pantalla tanto para la accion añadir que editar
 @OptIn(ExperimentalMaterial3Api::class)
@@ -103,3 +105,20 @@ fun DetailScreen(
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun DetailScreenPreview() {
+    //Viewmodel que solo sirve para mostrar el preview
+    val vmPreview = object : DetailViewModel(
+        repository = FilmsRepository()
+    ) {}
+
+    DetailScreen(
+        modifier = Modifier,
+        film = null, // preview para añadir
+        viewModel = vmPreview,
+        goToBack = {}
+    )
+}
+

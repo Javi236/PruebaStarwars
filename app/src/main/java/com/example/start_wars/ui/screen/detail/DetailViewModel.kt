@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 //Mismo viewModel tanto para la accion de añadir que de editar
 
 @HiltViewModel
-class DetailViewModel @Inject constructor(
+open class DetailViewModel @Inject constructor(
     private val repository: FilmsRepository
 ) : ViewModel() {
 

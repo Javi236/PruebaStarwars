@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.start_wars.R
 //Hacemo un mismo archivo tanto para añadir como para editar y dependiendo de la accion se muestran unos mensajes u otros
@@ -178,4 +179,41 @@ fun DetailContent(
 
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun DetailContentPreview() {
+    DetailContent(
+        editar = false,
+        title = "A New Hope",
+        episodeId = 4,
+        openingCrawl = "It is a period of civil war...",
+        director = "George Lucas",
+        producer = "Gary Kurtz",
+        releaseDate = "1977-05-25",
+        species = "Human, Droid",
+        starships = "X-Wing, TIE Fighter",
+        vehicles = "Sand Crawler",
+        characters = "Luke Skywalker, Leia Organa",
+        planets = "Tatooine, Yavin 4",
+        url = "https://swapi.dev/api/films/1/",
+        created = "2026-01-01T10:00:00",
+        edited = "2026-01-05T12:00:00",
+        onTitleChange = {},
+        onEpisodeIdChange = {},
+        onOpeningCrawlChange = {},
+        onDirectorChange = {},
+        onProducerChange = {},
+        onReleaseDateChange = {},
+        onSpeciesChange = {},
+        onStarshipsChange = {},
+        onVehiclesChange = {},
+        onCharactersChange = {},
+        onPlanetsChange = {},
+        onUrlChange = {},
+        onCreatedChange = {},
+        onEditedChange = {}
+    )
 }
