@@ -45,7 +45,7 @@ Funcionamiento de la accion eliminar:
 ### Editar
 La pantalla de edición permite modificar una película existente.
 
-Funcionamiento de la accion eliminar:
+Funcionamiento de la accion editar:
 1. Al estar en la pantalla de listar, se hara una pulsacion corta
 2. Tras la pulsacion se mostrara el formulario para editar la pelicula
 3. Tras presionar el boton de guardar, ya seran visibles los cambios
