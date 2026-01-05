@@ -24,4 +24,8 @@
     <string name="edicion_pelicula">Editar una pelicula</string>
     <string name="subtexto_edicion_pelicula">Selecciona la pelicula y editala</string>
     <string name="editar_pelicula">Editar Pelicula</string>
+    <string name="borar_pelicula">Borrar pelicula</string>
+    <string name="titulo_pelicula">¿Quiere eliminar la pelicula con el email:%1$s?</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancelar</string>
 </resources>
