@@ -38,7 +38,7 @@ fun NavHostScreen(
         startDestination = Routes.LISTAR,
         modifier = modifier,
 
-        // Animación por defecto (si quieres)
+        //Animacion basica con mas duracion de lo normal para que sea visible
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { it },

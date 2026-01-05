@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 
-
+//REUTILIZO LOS DIALOGOS QUE HEMOS TRABAJADO EN CLASE
 @Preview(showBackground = true)
 @Composable
 fun AlertDialogOKPreview() {
