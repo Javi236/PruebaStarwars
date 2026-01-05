@@ -1,4 +1,4 @@
-# Start Wars App ⭐
+# Start Wars App
 
 Aplicación Android desarrollada con **Kotlin y Jetpack Compose** para la gestión de películas de Star Wars.  
 La aplicación permite **listar, añadir, editar y eliminar películas**, además de incluir una pantalla informativa **About Us**.  
