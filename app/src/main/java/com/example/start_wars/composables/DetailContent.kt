@@ -17,7 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.start_wars.R
-//Hacemo un mismo archivo tanto para añadir como para editar y dependiendo de la accion se muestran unos mensajes u otros
+
+// Mismo contenido para añadir y editar
 @Composable
 fun DetailContent(
     modifier: Modifier = Modifier,
@@ -52,7 +53,9 @@ fun DetailContent(
     onEditedChange: (String) -> Unit
 ) {
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = modifier.fillMaxSize() // ✅ ahora sí usamos el modifier recibido
+    ) {
         HeaderBox()
 
         val scrollState = rememberScrollState()
@@ -66,7 +69,6 @@ fun DetailContent(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            //Aqui dependiendo de lo que sea mostramos una cosa u otra
             if (!editar) {
                 Text(
                     text = stringResource(R.string.creacion_pelicula),
@@ -86,14 +88,9 @@ fun DetailContent(
                         fontWeight = FontWeight.Bold
                     )
                 )
-
             }
 
-            CampoTexto(
-                label = "Título",
-                valor = title,
-                onChange = onTitleChange
-            )
+            CampoTexto("Título", title, onTitleChange)
 
             CampoTexto(
                 label = "Episodio",
@@ -101,65 +98,16 @@ fun DetailContent(
                 onChange = { onEpisodeIdChange(it.toIntOrNull() ?: 0) }
             )
 
-            CampoTexto(
-                label = "Opening Crawl",
-                valor = openingCrawl,
-                onChange = onOpeningCrawlChange
-            )
-
-            CampoTexto(
-                label = "Director",
-                valor = director,
-                onChange = onDirectorChange
-            )
-
-            CampoTexto(
-                label = "Productor",
-                valor = producer,
-                onChange = onProducerChange
-            )
-
-            CampoTexto(
-                label = "Fecha de estreno",
-                valor = releaseDate,
-                onChange = onReleaseDateChange
-            )
-
-            CampoTexto(
-                label = "Especies",
-                valor = species,
-                onChange = onSpeciesChange
-            )
-
-            CampoTexto(
-                label = "Naves",
-                valor = starships,
-                onChange = onStarshipsChange
-            )
-
-            CampoTexto(
-                label = "Vehículos",
-                valor = vehicles,
-                onChange = onVehiclesChange
-            )
-
-            CampoTexto(
-                label = "Personajes",
-                valor = characters,
-                onChange = onCharactersChange
-            )
-
-            CampoTexto(
-                label = "Planeta",
-                valor = planets,
-                onChange = onPlanetsChange
-            )
-
-            CampoTexto(
-                label = "URL",
-                valor = url,
-                onChange = onUrlChange
-            )
+            CampoTexto("Opening Crawl", openingCrawl, onOpeningCrawlChange)
+            CampoTexto("Director", director, onDirectorChange)
+            CampoTexto("Productor", producer, onProducerChange)
+            CampoTexto("Fecha de estreno", releaseDate, onReleaseDateChange)
+            CampoTexto("Especies", species, onSpeciesChange)
+            CampoTexto("Naves", starships, onStarshipsChange)
+            CampoTexto("Vehículos", vehicles, onVehiclesChange)
+            CampoTexto("Personajes", characters, onCharactersChange)
+            CampoTexto("Planetas", planets, onPlanetsChange)
+            CampoTexto("URL", url, onUrlChange)
 
             CampoTexto(
                 label = "Creado",
@@ -176,11 +124,9 @@ fun DetailContent(
             )
 
             Spacer(modifier = Modifier.height(100.dp))
-
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

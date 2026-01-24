@@ -1,6 +1,6 @@
 package com.example.start_wars.ui.screen.listar
 
-import com.example.start_wars.data.Films
+import com.example.start_wars.data.model.Films
 
 sealed class ListarState {
     data object Loading : ListarState()

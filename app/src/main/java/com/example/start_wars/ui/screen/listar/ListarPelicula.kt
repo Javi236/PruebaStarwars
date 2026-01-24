@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.example.start_wars.R
 import com.example.start_wars.composables.CardStyle
 import com.example.start_wars.composables.LocalCardStyle
-import com.example.start_wars.data.Films
+import com.example.start_wars.data.model.Films
 import com.example.start_wars.ui.screen.alertDialog.AlertDialogOkCancel
 import kotlinx.coroutines.launch
 
@@ -166,7 +166,7 @@ fun FilmsListScreen(
 
                             //Cuando se elimine la pelicula lanza el snackbar
                             onDelete = { film ->
-                                viewModel.delete(film)
+                                viewModel.onDelete(film)
                                 scope.launch {
                                     snackbarHostState.showSnackbar(
                                         "Película eliminada"
@@ -238,11 +238,11 @@ fun FilmsListContentPreview() {
             era = "Imperial Era",
             rating = "8.6",
             is_original_trilogy = true,
-            species = emptyList(),
-            starships = emptyList(),
-            vehicles = emptyList(),
-            characters = emptyList(),
-            planets = emptyList(),
+            species = "",
+            starships = "",
+            vehicles = "",
+            characters = "",
+            planets = "",
             url = "",
             created = "",
             edited = ""
@@ -257,11 +257,11 @@ fun FilmsListContentPreview() {
             era = "Republic Era",
             rating = "6.5",
             is_original_trilogy = false,
-            species = emptyList(),
-            starships = emptyList(),
-            vehicles = emptyList(),
-            characters = emptyList(),
-            planets = emptyList(),
+            species = "",
+            starships = "",
+            vehicles = "",
+            characters = "",
+            planets = "",
             url = "",
             created = "",
             edited = ""

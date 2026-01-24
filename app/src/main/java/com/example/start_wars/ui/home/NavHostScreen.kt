@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.example.start_wars.data.Films
+import com.example.start_wars.data.model.Films
 import com.example.start_wars.ui.screen.about.AboutUsScreen
 import com.example.start_wars.ui.screen.detail.DetailScreen
 import com.example.start_wars.ui.screen.listar.FilmsListScreen

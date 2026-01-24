@@ -12,11 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.start_wars.data.Films
+import com.example.start_wars.data.model.Films
 import com.example.start_wars.composables.DetailContent
-import com.example.start_wars.data.model.FilmsRepository
+import com.example.start_wars.data.repository.FilmsRepository
 
-//Misma pantalla tanto para la accion añadir que editar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
@@ -25,8 +24,7 @@ fun DetailScreen(
     viewModel: DetailViewModel,
     goToBack: () -> Unit
 ) {
-
-    val state = viewModel.state.value
+    val state = viewModel.state
     val isEdit = film != null
 
     LaunchedEffect(film) {
@@ -59,11 +57,11 @@ fun DetailScreen(
             director = state.director,
             producer = state.producer,
             releaseDate = state.release_date,
-            species = state.species.joinToString(","),
-            starships = state.starships.joinToString(","),
-            vehicles = state.vehicles.joinToString(","),
-            characters = state.characters.joinToString(","),
-            planets = state.planets.joinToString(","),
+            species = state.species,
+            starships = state.starships,
+            vehicles = state.vehicles,
+            characters = state.characters,
+            planets = state.planets,
             url = state.url,
             created = state.created,
             edited = state.edited,
@@ -73,52 +71,15 @@ fun DetailScreen(
             onDirectorChange = viewModel::onDirectorChange,
             onProducerChange = viewModel::onProducerChange,
             onReleaseDateChange = viewModel::onReleaseDateChange,
-            //Para estas acciones he tenido que consultar la ia, porque me estaban dando fallos
-            onSpeciesChange = { text ->
-                viewModel.onSpeciesChange(
-                    text.split(",").map { it.trim() }.filter { it.isNotEmpty() }
-                )
-            },
-            onStarshipsChange = { text ->
-                viewModel.onStarshipsChange(
-                    text.split(",").map { it.trim() }.filter { it.isNotEmpty() }
-                )
-            },
-            onVehiclesChange = { text ->
-                viewModel.onVehiclesChange(
-                    text.split(",").map { it.trim() }.filter { it.isNotEmpty() }
-                )
-            },
-            onCharactersChange = { text ->
-                viewModel.onCharactersChange(
-                    text.split(",").map { it.trim() }.filter { it.isNotEmpty() }
-                )
-            },
-            onPlanetsChange = { text ->
-                viewModel.onPlanetsChange(
-                    text.split(",").map { it.trim() }.filter { it.isNotEmpty() }
-                )
-            },
+            onSpeciesChange = viewModel::onSpeciesChange,
+            onStarshipsChange = viewModel::onStarshipsChange,
+            onVehiclesChange = viewModel::onVehiclesChange,
+            onCharactersChange = viewModel::onCharactersChange,
+            onPlanetsChange = viewModel::onPlanetsChange,
             onUrlChange = viewModel::onUrlChange,
             onCreatedChange = viewModel::onCreatedChange,
             onEditedChange = viewModel::onEditedChange
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DetailScreenPreview() {
-    //Viewmodel que solo sirve para mostrar el preview
-    val vmPreview = object : DetailViewModel(
-        repository = FilmsRepository()
-    ) {}
-
-    DetailScreen(
-        modifier = Modifier,
-        film = null, // preview para añadir
-        viewModel = vmPreview,
-        goToBack = {}
-    )
 }
 

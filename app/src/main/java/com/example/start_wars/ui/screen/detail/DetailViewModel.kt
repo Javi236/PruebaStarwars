@@ -1,36 +1,37 @@
 package com.example.start_wars.ui.screen.detail
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.start_wars.data.Films
-import com.example.start_wars.data.model.FilmsRepository
+import com.example.start_wars.data.model.Films
+import com.example.start_wars.data.repository.FilmsRepository
+import com.example.start_wars.network.BaseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-
-
-//Mismo viewModel tanto para la accion de añadir que de editar
+import javax.inject.Inject
 
 @HiltViewModel
-open class DetailViewModel @Inject constructor(
+class DetailViewModel @Inject constructor(
     private val repository: FilmsRepository
 ) : ViewModel() {
 
-    var state = mutableStateOf(DetailState())
+    var state by mutableStateOf(DetailState())
         private set
 
     private var editingFilm: Films? = null
 
     fun iniciar() {
         editingFilm = null
-        state.value = DetailState()
+        state = DetailState()
     }
 
     fun cargar(film: Films) {
         editingFilm = film
-        state.value = state.value.copy(
+        state = state.copy(
             title = film.title,
             episode_id = film.episode_id,
             opening_crawl = film.opening_crawl,
@@ -51,131 +52,133 @@ open class DetailViewModel @Inject constructor(
         )
     }
 
+    // --- Funciones onChange ---
     fun onTitleChange(value: String) {
-        state.value = state.value.copy(title = value)
+        state = state.copy(title = value)
     }
 
     fun onEpisodeIdChange(value: Int) {
-        state.value = state.value.copy(episode_id = value)
+        state = state.copy(episode_id = value)
     }
 
     fun onOpeningCrawlChange(value: String) {
-        state.value = state.value.copy(opening_crawl = value)
+        state = state.copy(opening_crawl = value)
     }
 
     fun onDirectorChange(value: String) {
-        state.value = state.value.copy(director = value)
+        state = state.copy(director = value)
     }
 
     fun onProducerChange(value: String) {
-        state.value = state.value.copy(producer = value)
+        state = state.copy(producer = value)
     }
 
     fun onReleaseDateChange(value: String) {
-        state.value = state.value.copy(release_date = value)
+        state = state.copy(release_date = value)
     }
 
     fun onEraChange(value: String) {
-        state.value = state.value.copy(era = value)
+        state = state.copy(era = value)
     }
 
     fun onRatingChange(value: String) {
-        state.value = state.value.copy(rating = value)
+        state = state.copy(rating = value)
     }
 
     fun onIsOriginalTrilogyChange(value: Boolean) {
-        state.value = state.value.copy(is_original_trilogy = value)
+        state = state.copy(is_original_trilogy = value)
     }
 
-    fun onSpeciesChange(value: List<String>) {
-        state.value = state.value.copy(species = value)
+    fun onSpeciesChange(value: String) {
+        state = state.copy(species = value)
     }
 
-    fun onStarshipsChange(value: List<String>) {
-        state.value = state.value.copy(starships = value)
+    fun onStarshipsChange(value: String) {
+        state = state.copy(starships = value)
     }
 
-    fun onVehiclesChange(value: List<String>) {
-        state.value = state.value.copy(vehicles = value)
+    fun onVehiclesChange(value: String) {
+        state = state.copy(vehicles = value)
     }
 
-    fun onCharactersChange(value: List<String>) {
-        state.value = state.value.copy(characters = value)
+    fun onCharactersChange(value: String) {
+        state = state.copy(characters = value)
     }
 
-    fun onPlanetsChange(value: List<String>) {
-        state.value = state.value.copy(planets = value)
+    fun onPlanetsChange(value: String) {
+        state = state.copy(planets = value)
     }
 
     fun onUrlChange(value: String) {
-        state.value = state.value.copy(url = value)
+        state = state.copy(url = value)
     }
 
     fun onCreatedChange(value: String) {
-        state.value = state.value.copy(created = value)
+        state = state.copy(created = value)
     }
 
     fun onEditedChange(value: String) {
-        state.value = state.value.copy(edited = value)
+        state = state.copy(edited = value)
     }
 
     fun guardar(goToBack: () -> Unit) {
-        viewModelScope.launch {
-            // si es null significa crear película
-            if (editingFilm == null) {
-                //Creamos una fecha para que tenga el mismo valor en los dos campos que son de fecha
-                val now = LocalDateTime.now().toString()
+        viewModelScope.launch(Dispatchers.IO) {
+            val now = LocalDateTime.now().toString()
 
+            if (editingFilm == null) {
+                // Crear película
                 val newFilm = Films(
-                    title = state.value.title,
-                    episode_id = state.value.episode_id,
-                    opening_crawl = state.value.opening_crawl,
-                    director = state.value.director,
-                    producer = state.value.producer,
-                    release_date = state.value.release_date,
-                    era = state.value.era,
-                    rating = state.value.rating,
-                    is_original_trilogy = state.value.is_original_trilogy,
-                    species = state.value.species,
-                    starships = state.value.starships,
-                    vehicles = state.value.vehicles,
-                    characters = state.value.characters,
-                    planets = state.value.planets,
-                    url = state.value.url,
+                    title = state.title,
+                    episode_id = state.episode_id,
+                    opening_crawl = state.opening_crawl,
+                    director = state.director,
+                    producer = state.producer,
+                    release_date = state.release_date,
+                    era = state.era,
+                    rating = state.rating,
+                    is_original_trilogy = state.is_original_trilogy,
+                    species = state.species,
+                    starships = state.starships,
+                    vehicles = state.vehicles,
+                    characters = state.characters,
+                    planets = state.planets,
+                    url = state.url,
                     created = now,
                     edited = now
                 )
 
-                repository.add(newFilm)
-                goToBack()
+                repository.addFilm(newFilm)
 
             } else {
-                // edito si no es null
-                val now = LocalDateTime.now().toString()
-
+                // Editar película existente
                 val updated = editingFilm!!.copy(
-                    title = state.value.title,
-                    episode_id = state.value.episode_id,
-                    opening_crawl = state.value.opening_crawl,
-                    director = state.value.director,
-                    producer = state.value.producer,
-                    release_date = state.value.release_date,
-                    era = state.value.era,
-                    rating = state.value.rating,
-                    is_original_trilogy = state.value.is_original_trilogy,
-                    species = state.value.species,
-                    starships = state.value.starships,
-                    vehicles = state.value.vehicles,
-                    characters = state.value.characters,
-                    planets = state.value.planets,
-                    url = state.value.url,
-                    created = state.value.created,
+                    title = state.title,
+                    episode_id = state.episode_id,
+                    opening_crawl = state.opening_crawl,
+                    director = state.director,
+                    producer = state.producer,
+                    release_date = state.release_date,
+                    era = state.era,
+                    rating = state.rating,
+                    is_original_trilogy = state.is_original_trilogy,
+                    species = state.species,
+                    starships = state.starships,
+                    vehicles = state.vehicles,
+                    characters = state.characters,
+                    planets = state.planets,
+                    url = state.url,
+                    created = state.created,
                     edited = now
                 )
 
-                repository.update(editingFilm!!.title, updated)
+                repository.updateFilm(updated)
+            }
+
+            // Navegación en hilo principal
+            launch(Dispatchers.Main) {
                 goToBack()
             }
+
         }
     }
 }

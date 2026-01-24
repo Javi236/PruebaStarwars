@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.room)
     alias(libs.plugins.kapt)
     alias(libs.plugins.kotlin.parcelize)
 }
@@ -40,6 +41,12 @@ android {
     buildFeatures {
         compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion  = "1.5.0"
+    }
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 }
 
 dependencies {
@@ -52,13 +59,13 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.lottie.compose)
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -66,15 +73,17 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.compose.material.icons.core)
-    implementation(libs.androidx.compose.material.icons.extended)
-    implementation(libs.androidx.material.icons.extended)
+
+    //Librerias de hilt
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    // Para integración con ViewModel
-    implementation(libs.androidx.hilt.navigation.compose)
+
+    // Las dependencias runtime son las mismas
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+
+    // Aplicar el compilador kapt
+    kapt(libs.androidx.room.compiler)
     implementation(libs.accompanist.navigation.animation)
-
-
 }
