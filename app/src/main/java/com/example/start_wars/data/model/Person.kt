@@ -13,7 +13,7 @@ import kotlinx.parcelize.Parcelize
     foreignKeys = [
         ForeignKey(
             entity = Films::class,
-            parentColumns = ["episode_id"], // ✅ clave primaria de Films
+            parentColumns = ["episode_id"],
             childColumns = ["filmId"],
             onDelete = ForeignKey.RESTRICT
         )
@@ -34,5 +34,5 @@ data class Person(
     val birthYear: String,
     val gender: String,
     val imgStarWars: Int,
-    val filmId: Int // ✅ cambiado de planetId a filmId
+    val filmId: Int
 ) : Parcelable

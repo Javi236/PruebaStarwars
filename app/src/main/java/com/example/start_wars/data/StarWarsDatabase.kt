@@ -11,7 +11,6 @@ import com.example.start_wars.data.dao.PersonDao
 import com.example.start_wars.data.model.Person
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
-import kotlin.text.insert
 
 @Database(
     version = 2,
@@ -92,7 +91,7 @@ abstract class StarWarsDatabase : RoomDatabase() {
                 filmsDao.insert(
                     Films(
                         title = "The Empire Strikes Back",
-                        episode_id = 5,
+                        episode_id = 1,
                         opening_crawl = "It is a dark time for the Rebellion...",
                         director = "Irvin Kershner",
                         producer = "Gary Kurtz, Rick McCallum",

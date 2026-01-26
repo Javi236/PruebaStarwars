@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 // Clase película
 @Parcelize
-@Entity(tableName = "films") // ✅ Necesario para que Room la reconozca
+@Entity(tableName = "films")
 data class Films(
     var title: String = "",
     @PrimaryKey
