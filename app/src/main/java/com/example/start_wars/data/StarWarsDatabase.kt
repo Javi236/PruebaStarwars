@@ -8,18 +8,22 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.start_wars.data.dao.FilmsDao
 import com.example.start_wars.data.model.Films
 import com.example.start_wars.data.dao.PersonDao
+import com.example.start_wars.data.dao.PlanetDao
+import com.example.start_wars.data.model.FilmPlanetEntity
 import com.example.start_wars.data.model.Person
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.Executors
+import com.example.start_wars.data.model.Planet
 
 @Database(
     version = 2,
-    entities = [Films::class, Person::class],
+    entities = [Films::class, Person::class, Planet::class, FilmPlanetEntity::class],
     exportSchema = false
 )
 abstract class StarWarsDatabase : RoomDatabase() {
     abstract fun getFilmsDao(): FilmsDao
     abstract fun getPersonDao(): PersonDao
+    abstract fun getPlanetDao(): PlanetDao
 
     companion object {
         /**
@@ -63,6 +67,7 @@ abstract class StarWarsDatabase : RoomDatabase() {
         fun prepopulateDatabase(database: StarWarsDatabase) {
             val filmsDao = database.getFilmsDao()
             val personDao = database.getPersonDao()
+            val planetDao = database.getPlanetDao()
 
             runBlocking {
                 // Insertamos películas de ejemplo
@@ -112,7 +117,7 @@ abstract class StarWarsDatabase : RoomDatabase() {
 
                 personDao.insert(
                     Person(
-                        id = 0,
+                        id = 1,
                         name = "Luke Skywalker",
                         height = "172",
                         mass = "77",
@@ -125,6 +130,37 @@ abstract class StarWarsDatabase : RoomDatabase() {
                         filmId = 1
                     )
                 )
+                planetDao.insert(
+                    Planet(
+                        1,
+                        name = "Tatooine",
+                        climate = "arid",
+                        terrain = "desert",
+                        population = "200000",
+                        gravity = "1 standard",
+                        diameter = "10465"
+                    )
+                )
+                planetDao.insert(
+                    Planet(
+                        2,
+                        name = "ESPAÑA",
+                        climate = "arid",
+                        terrain = "desert",
+                        population = "200000",
+                        gravity = "1 standard",
+                        diameter = "10465"
+                    )
+                )
+
+                filmsDao.insertJoinFilmPlanet(FilmPlanetEntity(filmId = 1, planetId = 1))
+
+                filmsDao.insertJoinFilmPlanet(FilmPlanetEntity(filmId = 1, planetId = 2))
+
+                val resultFilm = filmsDao.getFilmWithPlanet(episodeId = 1)
+                println(" - Pelicula: ${resultFilm.films.title}")
+                println(" - Planetas: ${resultFilm.planet}")
+
                 val resultPersonWithFilm = personDao.getPersonWithFilms(1)
                 print("${resultPersonWithFilm.person.name} nacio en ${resultPersonWithFilm.film.title}")
             }

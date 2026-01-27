@@ -98,7 +98,10 @@ fun DetailContent(
                 onChange = { onEpisodeIdChange(it.toIntOrNull() ?: 0) }
             )
 
-            CampoTexto("Opening Crawl", openingCrawl, onOpeningCrawlChange)
+            CampoTexto(
+                label = "Opening Crawl", valor = openingCrawl, onChange = onOpeningCrawlChange,
+
+            )
             CampoTexto("Director", director, onDirectorChange)
             CampoTexto("Productor", producer, onProducerChange)
             CampoTexto("Fecha de estreno", releaseDate, onReleaseDateChange)

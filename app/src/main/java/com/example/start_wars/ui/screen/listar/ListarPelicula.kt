@@ -83,7 +83,7 @@ fun ListarPelicula(modifier: Modifier = Modifier, film: Films) {
 
             Icon(
                 imageVector = icon,
-                contentDescription = "Film Icon",
+                contentDescription = "Film Icono",
                 modifier = Modifier.size(48.dp),
                 tint = style.borderColor
             )

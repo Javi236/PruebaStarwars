@@ -10,7 +10,7 @@ import com.example.start_wars.data.model.Planet
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface PlanetDAO {
+interface PlanetDao {
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
