@@ -11,10 +11,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.start_wars.data.model.Films
 import com.example.start_wars.composables.DetailContent
-import com.example.start_wars.data.repository.FilmsRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,7 +20,7 @@ fun DetailScreen(
     modifier: Modifier,
     film: Films?,
     viewModel: DetailViewModel,
-    goToBack: () -> Unit
+    goToBack: () -> Unit,
 ) {
     val state = viewModel.state
     val isEdit = film != null

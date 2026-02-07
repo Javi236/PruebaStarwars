@@ -1,25 +1,28 @@
 package com.example.start_wars.ui.home
 
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import Action
+import BaseTopAppBarState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import com.example.start_wars.data.model.Films
 import com.example.start_wars.ui.screen.about.AboutUsScreen
 import com.example.start_wars.ui.screen.detail.DetailScreen
 import com.example.start_wars.ui.screen.listar.FilmsListScreen
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import javax.inject.Singleton
 
+// --- TUS RUTAS MANTENIDAS ---
 object Routes {
     const val LISTAR = "list"
     const val EDITAR = "edit"
@@ -27,97 +30,29 @@ object Routes {
     const val ABOUT = "about"
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun NavHostScreen(
-    navController: NavHostController = rememberAnimatedNavController(),
-    modifier: Modifier
+    navController: NavHostController,
+    modifier: Modifier,
+    onConfigureTopBar: (BaseTopAppBarState) -> Unit,
+    onOpenDrawer: () -> Unit
 ) {
-    AnimatedNavHost(
+    val iconMenu = rememberVectorPainter(Icons.Default.Menu)
+    val iconBack = rememberVectorPainter(Icons.AutoMirrored.Filled.ArrowBack)
+
+    NavHost(
         navController = navController,
         startDestination = Routes.LISTAR,
-        modifier = modifier,
-
-        //Animacion basica con mas duracion de lo normal para que sea visible
-        enterTransition = {
-            slideInHorizontally(
-                initialOffsetX = { it },
-                animationSpec = tween(500)
-            ) + fadeIn(animationSpec = tween(500)) + scaleIn(
-                initialScale = 0.85f,
-                animationSpec = tween(500)
-            )
-        },
-        exitTransition = {
-            slideOutHorizontally(
-                targetOffsetX = { -it },
-                animationSpec = tween(500)
-            ) + fadeOut(animationSpec = tween(500)) + scaleOut(
-                targetScale = 1.10f,
-                animationSpec = tween(500)
-            )
-        },
-        popEnterTransition = {
-            slideInHorizontally(
-                initialOffsetX = { -it },
-                animationSpec = tween(500)
-            ) + fadeIn(animationSpec = tween(500)) + scaleIn(
-                initialScale = 1.10f,
-                animationSpec = tween(500)
-            )
-        },
-        popExitTransition = {
-            slideOutHorizontally(
-                targetOffsetX = { it },
-                animationSpec = tween(500)
-            ) + fadeOut(animationSpec = tween(500)) + scaleOut(
-                targetScale = 0.85f,
-                animationSpec = tween(500)
-            )
-        }
-
+        modifier = modifier
     ) {
-
-        composable(Routes.LISTAR) {
-            FilmsListScreen(
-                modifier = modifier,
-                viewModel = hiltViewModel(),
-                onAddFilm = { navController.navigate(Routes.CREACION) },
-                onEditFilm = { pelicula ->
-                    // Guardamos la peli para edit
-                    navController.currentBackStackEntry
-                        ?.savedStateHandle
-                        ?.set("clave", pelicula)
-
-                    navController.navigate(Routes.EDITAR)
-                }
-            )
-        }
-
-        composable(Routes.CREACION) {
-            DetailScreen(
-                modifier = modifier,
-                film = null,
-                viewModel = hiltViewModel(),
-                goToBack = { navController.popBackStack() }
-            )
-        }
-
-        composable(Routes.EDITAR) {
-            val pelicula = navController.previousBackStackEntry
-                ?.savedStateHandle
-                ?.get<Films>("clave")
-
-            DetailScreen(
-                modifier = modifier,
-                film = pelicula,
-                viewModel = hiltViewModel(),
-                goToBack = { navController.popBackStack() }
-            )
-        }
-
-        composable(Routes.ABOUT) {
-            AboutUsScreen()
-        }
+        // Invocamos el grafo externo
+        filmGraph(
+            navController = navController,
+            modifier = modifier,
+            iconMenu = iconMenu,
+            iconBack = iconBack,
+            onConfigureTopBar = onConfigureTopBar,
+            onOpenDrawer = onOpenDrawer
+        )
     }
 }

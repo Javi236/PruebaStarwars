@@ -36,6 +36,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +44,9 @@ import com.example.start_wars.R
 import com.example.start_wars.composables.CardStyle
 import com.example.start_wars.composables.LocalCardStyle
 import com.example.start_wars.data.model.Films
+import com.example.start_wars.ui.helper.AppPermissions
+import com.example.start_wars.ui.helper.NotificationHandler
+import com.example.start_wars.ui.helper.rememberPermissionsLauncher
 import com.example.start_wars.ui.screen.alertDialog.AlertDialogOkCancel
 import kotlinx.coroutines.launch
 
@@ -136,9 +140,30 @@ fun FilmsListScreen(
     modifier: Modifier = Modifier,
     viewModel: ListarViewModel,
     onAddFilm: () -> Unit,
-    onEditFilm: (Films) -> Unit
+    onEditFilm: (Films) -> Unit,
+    onShowSnackbar:(String) -> Unit,
+    goToBack: () -> Unit
+
 ) {
     val estado = viewModel.state
+    val context = LocalContext.current
+    val notificationHandler = remember { NotificationHandler(context) }//on clib del fabstate
+    // Launcher genérico para permisos (aquí solo pedimos Notificaciones)
+    val requestNotificationPermissionThenNotify = rememberPermissionsLauncher(
+        permissions = listOf(AppPermissions.Notifications),
+        onAllGranted = {
+            notificationHandler.showSimpleNotification(
+                contentTitle = "Planeta creado",
+                contentText = "Se ha dado de alta "
+            )
+            goToBack()
+        },
+        onDenied = {
+            // Opcional: si no concede, puedes avisar con snackbar
+            onShowSnackbar("Permiso de notificaciones denegado")
+            goToBack()
+        }
+    )
 
     //Se encarga de controllar el estado, y de cuando mostrarse y cuando no
     val snackbarHostState = remember { SnackbarHostState() }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import com.example.start_wars.data.StarWarsDatabase
 import com.example.start_wars.data.dao.FilmsDao
+import com.example.start_wars.data.dao.PlanetDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,21 +15,28 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
     @Provides
     @Singleton
-    fun provideResources(@ApplicationContext context: Context): Resources{
+    fun provideResources(@ApplicationContext context: Context): Resources {
         return context.resources
     }
 
     @Provides
     @Singleton
-    fun provideStarWarsDatabase(@ApplicationContext context: Context): StarWarsDatabase{
+    fun provideStarWarsDatabase(@ApplicationContext context: Context): StarWarsDatabase {
         return StarWarsDatabase.getDatabase(context)
     }
 
     @Provides
     @Singleton
-    fun providePlanetDao(starWarsDatabase: StarWarsDatabase): FilmsDao{
+    fun provideFilmsDao(starWarsDatabase: StarWarsDatabase): FilmsDao {
         return starWarsDatabase.getFilmsDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providePlanetDao(starWarsDatabase: StarWarsDatabase): PlanetDao {
+        return starWarsDatabase.getPlanetDao()
     }
 }

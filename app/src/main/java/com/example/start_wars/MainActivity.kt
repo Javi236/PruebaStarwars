@@ -1,126 +1,127 @@
 package com.example.start_wars
 
-import com.example.start_wars.ui.home.NavHostScreen
+import BaseTopAppBar
+import BaseTopAppBarState
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.AddCircleOutline
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.start_wars.ui.home.NavHostScreen
 import com.example.start_wars.ui.home.Routes
+import com.example.start_wars.ui.screen.listarPlanet.PlanetListScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            val entradaAnterior by navController.currentBackStackEntryAsState()
-            val rutaActual = entradaAnterior?.destination?.route
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentRoute = navBackStackEntry?.destination?.route
+
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+            val scope = rememberCoroutineScope()
+
+            val defaultIcon = rememberVectorPainter(Icons.Default.Menu)
+
+            var topBarState by remember {
+                mutableStateOf(
+                    BaseTopAppBarState(
+                        title = "Star Wars",
+                        iconUpAction = defaultIcon,
+                        upAction = {
+                            // Acción por defecto: abrir el menú
+                            scope.launch { drawerState.open() }
+                        },
+                        actions = emptyList()
+                    )
+                )
+            }
 
             MaterialTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
+                ModalNavigationDrawer(
+                    drawerState = drawerState,
+                    drawerContent = {
+                        ModalDrawerSheet {
+                            Text(
+                                text = "Menú Star Wars",
+                                modifier = Modifier.padding(16.dp),
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            HorizontalDivider()
 
-                    topBar = {
-                        TopAppBar(
-                            title = { Text("Star Wars") },
-                            //Boton de añadir en el topbar
-                            actions = {
-                                IconButton(onClick = {
-                                    navController.navigate(Routes.CREACION)
-                                }) {
-                                    Icon(
-                                        Icons.Default.AddCircleOutline,
-                                        contentDescription = "Acción crear"
-                                    )
-                                }
-                                //Boton de listar en topbar
-                                IconButton(onClick = {
-                                    navController.navigate(Routes.LISTAR)
-                                }) {
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.List,
-                                        contentDescription = "Listar"
-                                    )
-                                }
-                                //Y el menu overflow
-                                OverflowMenu(
-                                    onAboutUs = {
-                                        navController.navigate(Routes.ABOUT)
-                                    }
-                                )
-                            }
-                        )
-                    },
-                    //No he entendido muy bien el enunciado pero creo que es esto lo que se pide
-                    //He puesto dos botones diferentes, uno cuando estas en listar y otro cuando ya vas a añadir una pelicula
-                    floatingActionButton = {
-                        if (rutaActual == Routes.LISTAR) {
-                            FloatingActionButton(
+                            NavigationDrawerItem(
+                                label = { Text("Listado Películas") },
+                                selected = currentRoute == Routes.LISTAR,
                                 onClick = {
-                                    navController.navigate(Routes.CREACION)
+                                    navController.navigate(Routes.LISTAR) {
+                                        popUpTo(Routes.LISTAR) { inclusive = true }
+                                    }
+                                    scope.launch { drawerState.close() }
                                 }
-                            ) {
-                                Icon(
-                                    Icons.Default.AddCircleOutline,
-                                    contentDescription = "Crear película"
-                                )
-                            }
+                            )
+
+                            NavigationDrawerItem(
+                                label = { Text("Acerca de") },
+                                selected = currentRoute == Routes.ABOUT,
+                                onClick = {
+                                    navController.navigate(Routes.ABOUT)
+                                    scope.launch { drawerState.close() }
+                                }
+                            )
+                            /*
+                            NavigationDrawerItem(
+                                label = { Text("Planet") },
+                                selected = currentRoute == Routes.ABOUT,
+                                onClick = {
+                                    navController.navigate(PlanetListScreen() { })
+                                    scope.launch { drawerState.close() }
+                                }
+                            )*/
                         }
                     }
-
-                ) { innerPadding ->
-                    NavHostScreen(
-                        navController = navController,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                ) {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        topBar = {
+                            BaseTopAppBar(state = topBarState)
+                        },
+                        floatingActionButton = {
+                            if (currentRoute == Routes.LISTAR) {
+                                FloatingActionButton(
+                                    onClick = { navController.navigate(Routes.CREACION) }
+                                ) {
+                                    Icon(Icons.Default.Add, contentDescription = "Añadir")
+                                }
+                            }
+                        }
+                    ) { innerPadding ->
+                        NavHostScreen(
+                            navController = navController,
+                            modifier = Modifier.padding(innerPadding),
+                            onConfigureTopBar = { newState ->
+                                topBarState = newState
+                            },
+                            onOpenDrawer = { scope.launch { drawerState.open() } }
+                        )
+                    }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun OverflowMenu(
-    onAboutUs: () -> Unit,
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box {
-        IconButton(
-            onClick = { expanded = true }
-        ) {
-            Icon(
-                Icons.Default.MoreVert,
-                contentDescription = "Más opciones"
-            )
-        }
-
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = { Text("Sobre nosotros") },
-                onClick = {
-                    expanded = false
-                    onAboutUs()
-                }
-            )
         }
     }
 }

@@ -4,7 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.start_wars.composables.Converters
 import com.example.start_wars.data.dao.FilmsDao
 import com.example.start_wars.data.model.Films
 import com.example.start_wars.data.dao.PersonDao
@@ -20,6 +23,7 @@ import com.example.start_wars.data.model.Planet
     entities = [Films::class, Person::class, Planet::class, FilmPlanetEntity::class],
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class StarWarsDatabase : RoomDatabase() {
     abstract fun getFilmsDao(): FilmsDao
     abstract fun getPersonDao(): PersonDao
@@ -63,7 +67,6 @@ abstract class StarWarsDatabase : RoomDatabase() {
                 instance
             }
         }
-
         fun prepopulateDatabase(database: StarWarsDatabase) {
             val filmsDao = database.getFilmsDao()
             val personDao = database.getPersonDao()
